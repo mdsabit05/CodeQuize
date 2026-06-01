@@ -3,8 +3,20 @@ main = "src/index.ts"
 compatibility_date = "2024-12-19"
 compatibility_flags = ["nodejs_compat"]
 
+[dev]
+port = 15638
+
 [[d1_databases]]
 binding = "DB"
 database_name = "app-db"
 database_id = "local"
 migrations_dir = "migrations"
+
+[[queues.producers]]
+queue = "quiz-jobs"
+binding = "QUIZ_QUEUE"
+
+[[queues.consumers]]
+queue = "quiz-jobs"
+max_batch_size = 1
+max_batch_timeout = 30

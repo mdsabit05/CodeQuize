@@ -5,4 +5,6 @@ export type Env = {
   GITHUB_CLIENT_ID: string;
   GITHUB_CLIENT_SECRET: string;
   GITHUB_REDIRECT_URI: string;
+  ANTHROPIC_API_KEY: string;
+  QUIZ_QUEUE: Queue<{ jobId: string; userId: string; repoFullName: string }>;
 };
