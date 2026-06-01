@@ -86,3 +86,15 @@ export const githubSelectedRepo = sqliteTable("github_selected_repo", {
   repoFullName: text("repo_full_name").notNull(),
   selectedAt: integer("selected_at", { mode: "timestamp" }).notNull(),
 });
+
+export const quizJob = sqliteTable("quiz_job", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  repoFullName: text("repo_full_name").notNull(),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  concepts: text("concepts"), // JSON: [{title, description}]
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
