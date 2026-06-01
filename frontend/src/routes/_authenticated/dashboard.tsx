@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { api } from "@/lib/axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,27 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
+
+function StartButton({ repoFullName }: { repoFullName: string }) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  async function handleStart() {
+    setLoading(true);
+    try {
+      const { data } = await api.post("/api/quiz/start", { repoFullName });
+      navigate({ to: "/quiz/$jobId", params: { jobId: data.jobId } });
+    } catch {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button size="sm" onClick={handleStart} disabled={loading}>
+      {loading ? "Starting…" : "Start"}
+    </Button>
+  );
+}
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -78,9 +100,7 @@ function Dashboard() {
                         className="flex items-center justify-between text-sm border rounded px-3 py-2"
                       >
                         <span>{r.repoFullName}</span>
-                        <Button size="sm" disabled>
-                          Start
-                        </Button>
+                        <StartButton repoFullName={r.repoFullName} />
                       </div>
                     )
                   )}
