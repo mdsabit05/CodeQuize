@@ -4,6 +4,8 @@ import { sessionMiddleware } from "./middleware/session";
 import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/user";
 import { githubRouter } from "./routes/github";
+import { quizRouter } from "./routes/quiz";
+import { handleQueue } from "./queue";
 import type { Env } from "./env";
 import type { Variables } from "./middleware/session";
 
@@ -29,5 +31,9 @@ app.use("*", sessionMiddleware);
 app.route("/api/auth", authRouter);
 app.route("/api", userRouter);
 app.route("/api/github", githubRouter);
+app.route("/api/quiz", quizRouter);
 
-export default app;
+export default {
+  fetch: app.fetch,
+  queue: handleQueue,
+};
