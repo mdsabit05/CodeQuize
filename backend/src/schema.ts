@@ -55,3 +55,34 @@ export const verification = sqliteTable("verification", {
   createdAt: integer("created_at", { mode: "timestamp" }),
   updatedAt: integer("updated_at", { mode: "timestamp" }),
 });
+
+export const oauthState = sqliteTable("oauth_state", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+});
+
+export const githubConnection = sqliteTable("github_connection", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  githubUserId: text("github_user_id").notNull(),
+  githubUsername: text("github_username").notNull(),
+  accessToken: text("access_token").notNull(),
+  connectedAt: integer("connected_at", { mode: "timestamp" }).notNull(),
+});
+
+export const githubSelectedRepo = sqliteTable("github_selected_repo", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  repoId: text("repo_id").notNull(),
+  repoName: text("repo_name").notNull(),
+  repoFullName: text("repo_full_name").notNull(),
+  selectedAt: integer("selected_at", { mode: "timestamp" }).notNull(),
+});

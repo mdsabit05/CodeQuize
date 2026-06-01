@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { sessionMiddleware } from "./middleware/session";
 import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/user";
+import { githubRouter } from "./routes/github";
 import type { Env } from "./env";
 import type { Variables } from "./middleware/session";
 
@@ -27,5 +28,6 @@ app.use("*", sessionMiddleware);
 
 app.route("/api/auth", authRouter);
 app.route("/api", userRouter);
+app.route("/api/github", githubRouter);
 
 export default app;
