@@ -99,6 +99,32 @@ export const quizJob = sqliteTable("quiz_job", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
+export const quizGenJob = sqliteTable("quiz_gen_job", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  topicJobId: text("topic_job_id").notNull(),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  questions: text("questions"), // JSON: Question[]
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export const quizAttempt = sqliteTable("quiz_attempt", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  quizGenJobId: text("quiz_gen_job_id").notNull(),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  answers: text("answers"), // JSON: { questionIndex, answer }[]
+  score: integer("score"), // 0-100
+  feedback: text("feedback"), // JSON: { questionIndex, correct, explanation }[]
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
 export const topicJob = sqliteTable("topic_job", {
   id: text("id").primaryKey(),
   userId: text("user_id")
