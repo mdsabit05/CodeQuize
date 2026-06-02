@@ -63,12 +63,22 @@ function QuizJobPage() {
 
       <div className="space-y-3">
         {data?.concepts?.map((concept, i) => (
-          <Card key={i}>
+          <Card
+            key={i}
+            className="cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() =>
+              navigate({
+                to: "/topic/start/$quizJobId/$conceptIndex",
+                params: { quizJobId: jobId, conceptIndex: String(i) },
+              })
+            }
+          >
             <CardHeader className="pb-1 pt-4 px-4">
               <CardTitle className="text-base">{concept.title}</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4">
               <p className="text-sm text-muted-foreground">{concept.description}</p>
+              <p className="text-xs text-indigo-500 mt-2">Click to get topic ideas →</p>
             </CardContent>
           </Card>
         ))}
