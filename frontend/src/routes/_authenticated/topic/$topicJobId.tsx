@@ -37,7 +37,10 @@ function TopicJobPage() {
         topicJobId,
         selectedTopics: selected,
       }),
-    onSuccess: () => navigate({ to: "/dashboard" }),
+    onSuccess: () => navigate({
+      to: "/quiz-gen/start/$topicJobId",
+      params: { topicJobId },
+    }),
   });
 
   function toggleTopic(title: string) {
@@ -119,7 +122,7 @@ function TopicJobPage() {
           onClick={() => saveMutation.mutate()}
           disabled={selected.length === 0 || saveMutation.isPending}
         >
-          {saveMutation.isPending ? "Saving…" : "Save selection"}
+          {saveMutation.isPending ? "Saving…" : "Save & Generate Quiz →"}
         </Button>
         <Button variant="outline" onClick={() => navigate({ to: "/dashboard" })}>
           Cancel
