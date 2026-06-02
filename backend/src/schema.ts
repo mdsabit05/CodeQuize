@@ -98,3 +98,19 @@ export const quizJob = sqliteTable("quiz_job", {
   error: text("error"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
+
+export const topicJob = sqliteTable("topic_job", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  quizJobId: text("quiz_job_id")
+    .notNull()
+    .references(() => quizJob.id, { onDelete: "cascade" }),
+  conceptIndex: integer("concept_index").notNull(),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  topics: text("topics"), // JSON: [{title, description}]
+  selectedTopics: text("selected_topics"), // JSON: string[]
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
