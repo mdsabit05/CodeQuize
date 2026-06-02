@@ -6,6 +6,7 @@ import { userRouter } from "./routes/user";
 import { githubRouter } from "./routes/github";
 import { quizRouter } from "./routes/quiz";
 import { topicRouter } from "./routes/topic";
+import { quizGenRouter } from "./routes/quiz-gen";
 import { handleQueue } from "./queue";
 import type { Env } from "./env";
 import type { Variables } from "./middleware/session";
@@ -34,6 +35,7 @@ app.route("/api", userRouter);
 app.route("/api/github", githubRouter);
 app.route("/api/quiz", quizRouter);
 app.route("/api/topic", topicRouter);
+app.route("/api/quiz-gen", quizGenRouter);
 
 export default {
   fetch: app.fetch,
