@@ -7,12 +7,13 @@ type JobMessage = { jobId: string; userId: string; repoFullName: string };
 
 async function callOpenRouter(
   apiKey: string,
+  gatewayUrl: string,
   model: string,
   userMessage: string,
   toolSchema: object,
   toolName: string
 ): Promise<{ concepts: { title: string; description: string }[] }> {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  const res = await fetch(`${gatewayUrl}/v1/chat/completions`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
@@ -102,6 +103,7 @@ export async function handleQueue(
 
       const { concepts } = await callOpenRouter(
         env.ANTHROPIC_API_KEY,
+        env.AI_GATEWAY_URL,
         "anthropic/claude-haiku-4-5",
         `Here are recent code changes from the GitHub repo "${repoFullName}":\n\n${diffText}\n\nExtract 3 to 5 key programming concepts that a developer would learn from studying these changes. Skip trivial changes like renamed files or version bumps. Focus on real ideas.`,
         {
