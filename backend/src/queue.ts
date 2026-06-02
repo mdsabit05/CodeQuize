@@ -1,10 +1,53 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { eq } from "drizzle-orm";
 import { createDb } from "./db";
 import { quizJob, githubConnection } from "./schema";
 import type { Env } from "./env";
 
 type JobMessage = { jobId: string; userId: string; repoFullName: string };
+
+async function callOpenRouter(
+  apiKey: string,
+  model: string,
+  userMessage: string,
+  toolSchema: object,
+  toolName: string
+): Promise<{ concepts: { title: string; description: string }[] }> {
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: "user", content: userMessage }],
+      tools: [
+        {
+          type: "function",
+          function: {
+            name: toolName,
+            description: "Extract key programming concepts from recent code changes",
+            parameters: toolSchema,
+          },
+        },
+      ],
+      tool_choice: { type: "function", function: { name: toolName } },
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`${res.status} ${text}`);
+  }
+
+  const json = await res.json<{
+    choices: { message: { tool_calls: { function: { arguments: string } }[] } }[];
+  }>();
+
+  const args = json.choices[0]?.message?.tool_calls?.[0]?.function?.arguments;
+  if (!args) throw new Error("No tool call in response");
+  return JSON.parse(args);
+}
 
 export async function handleQueue(
   batch: MessageBatch<JobMessage>,
@@ -51,59 +94,38 @@ export async function handleQueue(
             }
           );
           const diff = await res.text();
-          return `## ${commit.commit.message}\n\n${diff.slice(0, 3000)}`; // cap per commit
+          return `## ${commit.commit.message}\n\n${diff.slice(0, 3000)}`;
         })
       );
 
-      const diffText = diffs.join("\n\n---\n\n").slice(0, 12000); // total cap
+      const diffText = diffs.join("\n\n---\n\n").slice(0, 12000);
 
-      // Call Claude with tool_use for fixed-shape output
-      const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-
-      const response = await anthropic.messages.create({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 1024,
-        tools: [
-          {
-            name: "extract_concepts",
-            description: "Extract key programming concepts from recent code changes",
-            input_schema: {
-              type: "object" as const,
-              properties: {
-                concepts: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      title: { type: "string", description: "Short concept name (5-8 words max)" },
-                      description: { type: "string", description: "One sentence explaining what this concept is and why it matters" },
-                    },
-                    required: ["title", "description"],
-                  },
-                  minItems: 3,
-                  maxItems: 5,
+      const { concepts } = await callOpenRouter(
+        env.ANTHROPIC_API_KEY,
+        "anthropic/claude-haiku-4-5",
+        `Here are recent code changes from the GitHub repo "${repoFullName}":\n\n${diffText}\n\nExtract 3 to 5 key programming concepts that a developer would learn from studying these changes. Skip trivial changes like renamed files or version bumps. Focus on real ideas.`,
+        {
+          type: "object",
+          properties: {
+            concepts: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  title: { type: "string", description: "Short concept name (5-8 words max)" },
+                  description: { type: "string", description: "One sentence explaining what this concept is and why it matters" },
                 },
+                required: ["title", "description"],
               },
-              required: ["concepts"],
+              minItems: 3,
+              maxItems: 5,
             },
           },
-        ],
-        tool_choice: { type: "tool", name: "extract_concepts" },
-        messages: [
-          {
-            role: "user",
-            content: `Here are recent code changes from the GitHub repo "${repoFullName}":\n\n${diffText}\n\nExtract 3 to 5 key programming concepts that a developer would learn from studying these changes. Skip trivial changes like renamed files or version bumps. Focus on real ideas.`,
-          },
-        ],
-      });
+          required: ["concepts"],
+        },
+        "extract_concepts"
+      );
 
-      // Extract structured result from tool_use response
-      const toolBlock = response.content.find((b) => b.type === "tool_use");
-      if (!toolBlock || toolBlock.type !== "tool_use") throw new Error("No tool_use block in response");
-
-      const { concepts } = toolBlock.input as { concepts: { title: string; description: string }[] };
-
-      // Save result
       await db
         .update(quizJob)
         .set({ status: "done", concepts: JSON.stringify(concepts) })
@@ -116,7 +138,7 @@ export async function handleQueue(
         .update(quizJob)
         .set({ status: "error", error: msg })
         .where(eq(quizJob.id, jobId));
-      message.ack(); // ack to prevent infinite retry
+      message.ack();
     }
   }
 }

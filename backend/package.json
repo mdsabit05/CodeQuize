@@ -11,9 +11,11 @@
     "auth:generate": "npx @better-auth/cli@latest generate --config src/auth.ts --output src/schema.ts -y"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.1",
     "better-auth": "^1.2.7",
     "drizzle-orm": "^0.44.1",
-    "hono": "^4.7.10"
+    "hono": "^4.7.10",
+    "kysely": "^0.27.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250525.0",
