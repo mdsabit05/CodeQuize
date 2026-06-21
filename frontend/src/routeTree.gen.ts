@@ -9,18 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedTopicTopicJobIdRouteImport } from './routes/_authenticated/topic/$topicJobId'
+import { Route as AuthenticatedQuizJobIdRouteImport } from './routes/_authenticated/quiz/$jobId'
+import { Route as AuthenticatedQuizGenJobIdRouteImport } from './routes/_authenticated/quiz-gen/$jobId'
 import { Route as AuthenticatedGithubReposRouteImport } from './routes/_authenticated/github/repos'
+import { Route as AuthenticatedAdminUserIdRouteImport } from './routes/_authenticated/admin/$userId'
+import { Route as AuthenticatedQuizGenStartTopicJobIdRouteImport } from './routes/_authenticated/quiz-gen/start.$topicJobId'
+import { Route as AuthenticatedQuizGenAttemptAttemptIdRouteImport } from './routes/_authenticated/quiz-gen/attempt.$attemptId'
+import { Route as AuthenticatedTopicStartQuizJobIdConceptIndexRouteImport } from './routes/_authenticated/topic/start.$quizJobId.$conceptIndex'
 
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -35,72 +39,185 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTopicTopicJobIdRoute =
+  AuthenticatedTopicTopicJobIdRouteImport.update({
+    id: '/topic/$topicJobId',
+    path: '/topic/$topicJobId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedQuizJobIdRoute = AuthenticatedQuizJobIdRouteImport.update({
+  id: '/quiz/$jobId',
+  path: '/quiz/$jobId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedQuizGenJobIdRoute =
+  AuthenticatedQuizGenJobIdRouteImport.update({
+    id: '/quiz-gen/$jobId',
+    path: '/quiz-gen/$jobId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedGithubReposRoute =
   AuthenticatedGithubReposRouteImport.update({
     id: '/github/repos',
     path: '/github/repos',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminUserIdRoute =
+  AuthenticatedAdminUserIdRouteImport.update({
+    id: '/admin/$userId',
+    path: '/admin/$userId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedQuizGenStartTopicJobIdRoute =
+  AuthenticatedQuizGenStartTopicJobIdRouteImport.update({
+    id: '/quiz-gen/start/$topicJobId',
+    path: '/quiz-gen/start/$topicJobId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedQuizGenAttemptAttemptIdRoute =
+  AuthenticatedQuizGenAttemptAttemptIdRouteImport.update({
+    id: '/quiz-gen/attempt/$attemptId',
+    path: '/quiz-gen/attempt/$attemptId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTopicStartQuizJobIdConceptIndexRoute =
+  AuthenticatedTopicStartQuizJobIdConceptIndexRouteImport.update({
+    id: '/topic/start/$quizJobId/$conceptIndex',
+    path: '/topic/start/$quizJobId/$conceptIndex',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/admin/$userId': typeof AuthenticatedAdminUserIdRoute
   '/github/repos': typeof AuthenticatedGithubReposRoute
+  '/quiz-gen/$jobId': typeof AuthenticatedQuizGenJobIdRoute
+  '/quiz/$jobId': typeof AuthenticatedQuizJobIdRoute
+  '/topic/$topicJobId': typeof AuthenticatedTopicTopicJobIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/quiz-gen/attempt/$attemptId': typeof AuthenticatedQuizGenAttemptAttemptIdRoute
+  '/quiz-gen/start/$topicJobId': typeof AuthenticatedQuizGenStartTopicJobIdRoute
+  '/topic/start/$quizJobId/$conceptIndex': typeof AuthenticatedTopicStartQuizJobIdConceptIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/admin/$userId': typeof AuthenticatedAdminUserIdRoute
   '/github/repos': typeof AuthenticatedGithubReposRoute
+  '/quiz-gen/$jobId': typeof AuthenticatedQuizGenJobIdRoute
+  '/quiz/$jobId': typeof AuthenticatedQuizJobIdRoute
+  '/topic/$topicJobId': typeof AuthenticatedTopicTopicJobIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/quiz-gen/attempt/$attemptId': typeof AuthenticatedQuizGenAttemptAttemptIdRoute
+  '/quiz-gen/start/$topicJobId': typeof AuthenticatedQuizGenStartTopicJobIdRoute
+  '/topic/start/$quizJobId/$conceptIndex': typeof AuthenticatedTopicStartQuizJobIdConceptIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/_authenticated/admin/$userId': typeof AuthenticatedAdminUserIdRoute
   '/_authenticated/github/repos': typeof AuthenticatedGithubReposRoute
+  '/_authenticated/quiz-gen/$jobId': typeof AuthenticatedQuizGenJobIdRoute
+  '/_authenticated/quiz/$jobId': typeof AuthenticatedQuizJobIdRoute
+  '/_authenticated/topic/$topicJobId': typeof AuthenticatedTopicTopicJobIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/quiz-gen/attempt/$attemptId': typeof AuthenticatedQuizGenAttemptAttemptIdRoute
+  '/_authenticated/quiz-gen/start/$topicJobId': typeof AuthenticatedQuizGenStartTopicJobIdRoute
+  '/_authenticated/topic/start/$quizJobId/$conceptIndex': typeof AuthenticatedTopicStartQuizJobIdConceptIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/dashboard' | '/github/repos'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/history'
+    | '/blog/$slug'
+    | '/admin/$userId'
+    | '/github/repos'
+    | '/quiz-gen/$jobId'
+    | '/quiz/$jobId'
+    | '/topic/$topicJobId'
+    | '/admin/'
+    | '/quiz-gen/attempt/$attemptId'
+    | '/quiz-gen/start/$topicJobId'
+    | '/topic/start/$quizJobId/$conceptIndex'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/dashboard' | '/github/repos'
+  to:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/history'
+    | '/blog/$slug'
+    | '/admin/$userId'
+    | '/github/repos'
+    | '/quiz-gen/$jobId'
+    | '/quiz/$jobId'
+    | '/topic/$topicJobId'
+    | '/admin'
+    | '/quiz-gen/attempt/$attemptId'
+    | '/quiz-gen/start/$topicJobId'
+    | '/topic/start/$quizJobId/$conceptIndex'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
-    | '/register'
     | '/_authenticated/dashboard'
+    | '/_authenticated/history'
+    | '/blog/$slug'
+    | '/_authenticated/admin/$userId'
     | '/_authenticated/github/repos'
+    | '/_authenticated/quiz-gen/$jobId'
+    | '/_authenticated/quiz/$jobId'
+    | '/_authenticated/topic/$topicJobId'
+    | '/_authenticated/admin/'
+    | '/_authenticated/quiz-gen/attempt/$attemptId'
+    | '/_authenticated/quiz-gen/start/$topicJobId'
+    | '/_authenticated/topic/start/$quizJobId/$conceptIndex'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
+  BlogSlugRoute: typeof BlogSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -122,11 +239,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/topic/$topicJobId': {
+      id: '/_authenticated/topic/$topicJobId'
+      path: '/topic/$topicJobId'
+      fullPath: '/topic/$topicJobId'
+      preLoaderRoute: typeof AuthenticatedTopicTopicJobIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/quiz/$jobId': {
+      id: '/_authenticated/quiz/$jobId'
+      path: '/quiz/$jobId'
+      fullPath: '/quiz/$jobId'
+      preLoaderRoute: typeof AuthenticatedQuizJobIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/quiz-gen/$jobId': {
+      id: '/_authenticated/quiz-gen/$jobId'
+      path: '/quiz-gen/$jobId'
+      fullPath: '/quiz-gen/$jobId'
+      preLoaderRoute: typeof AuthenticatedQuizGenJobIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/github/repos': {
@@ -136,17 +295,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGithubReposRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/$userId': {
+      id: '/_authenticated/admin/$userId'
+      path: '/admin/$userId'
+      fullPath: '/admin/$userId'
+      preLoaderRoute: typeof AuthenticatedAdminUserIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/quiz-gen/start/$topicJobId': {
+      id: '/_authenticated/quiz-gen/start/$topicJobId'
+      path: '/quiz-gen/start/$topicJobId'
+      fullPath: '/quiz-gen/start/$topicJobId'
+      preLoaderRoute: typeof AuthenticatedQuizGenStartTopicJobIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/quiz-gen/attempt/$attemptId': {
+      id: '/_authenticated/quiz-gen/attempt/$attemptId'
+      path: '/quiz-gen/attempt/$attemptId'
+      fullPath: '/quiz-gen/attempt/$attemptId'
+      preLoaderRoute: typeof AuthenticatedQuizGenAttemptAttemptIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/topic/start/$quizJobId/$conceptIndex': {
+      id: '/_authenticated/topic/start/$quizJobId/$conceptIndex'
+      path: '/topic/start/$quizJobId/$conceptIndex'
+      fullPath: '/topic/start/$quizJobId/$conceptIndex'
+      preLoaderRoute: typeof AuthenticatedTopicStartQuizJobIdConceptIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedAdminUserIdRoute: typeof AuthenticatedAdminUserIdRoute
   AuthenticatedGithubReposRoute: typeof AuthenticatedGithubReposRoute
+  AuthenticatedQuizGenJobIdRoute: typeof AuthenticatedQuizGenJobIdRoute
+  AuthenticatedQuizJobIdRoute: typeof AuthenticatedQuizJobIdRoute
+  AuthenticatedTopicTopicJobIdRoute: typeof AuthenticatedTopicTopicJobIdRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedQuizGenAttemptAttemptIdRoute: typeof AuthenticatedQuizGenAttemptAttemptIdRoute
+  AuthenticatedQuizGenStartTopicJobIdRoute: typeof AuthenticatedQuizGenStartTopicJobIdRoute
+  AuthenticatedTopicStartQuizJobIdConceptIndexRoute: typeof AuthenticatedTopicStartQuizJobIdConceptIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedAdminUserIdRoute: AuthenticatedAdminUserIdRoute,
   AuthenticatedGithubReposRoute: AuthenticatedGithubReposRoute,
+  AuthenticatedQuizGenJobIdRoute: AuthenticatedQuizGenJobIdRoute,
+  AuthenticatedQuizJobIdRoute: AuthenticatedQuizJobIdRoute,
+  AuthenticatedTopicTopicJobIdRoute: AuthenticatedTopicTopicJobIdRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedQuizGenAttemptAttemptIdRoute:
+    AuthenticatedQuizGenAttemptAttemptIdRoute,
+  AuthenticatedQuizGenStartTopicJobIdRoute:
+    AuthenticatedQuizGenStartTopicJobIdRoute,
+  AuthenticatedTopicStartQuizJobIdConceptIndexRoute:
+    AuthenticatedTopicStartQuizJobIdConceptIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -157,7 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
-  RegisterRoute: RegisterRoute,
+  BlogSlugRoute: BlogSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

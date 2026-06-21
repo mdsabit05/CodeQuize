@@ -23,6 +23,7 @@ function TopicStartPage() {
         navigate({
           to: "/topic/$topicJobId",
           params: { topicJobId: data.jobId },
+          replace: true,
         });
       })
       .catch((err) => {
@@ -32,15 +33,15 @@ function TopicStartPage() {
 
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto space-y-3">
-        <p className="text-sm text-red-500">{error}</p>
+      <div className="max-w-2xl mx-auto py-8">
+        <p className="text-sm text-destructive">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto flex items-center gap-3">
-      <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+    <div className="max-w-2xl mx-auto flex items-center gap-3 py-8">
+      <div className="cq-spinner" />
       <p className="text-sm text-muted-foreground">Starting…</p>
     </div>
   );

@@ -13,4 +13,20 @@ export default defineConfig({
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },
+  server: {
+    host: "0.0.0.0",
+    port: 20498,
+    allowedHosts: true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:15638",
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on("proxyReq", (proxyReq) => {
+            proxyReq.setHeader("origin", "http://localhost:15638");
+          });
+        },
+      },
+    },
+  },
 });

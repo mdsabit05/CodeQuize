@@ -2,6 +2,12 @@ name = "app-backend"
 main = "src/index.ts"
 compatibility_date = "2024-12-19"
 compatibility_flags = ["nodejs_compat"]
+account_id = "be26dfaa48902b2de1db67a1eeecb869"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 [dev]
 port = 15638
@@ -9,7 +15,7 @@ port = 15638
 [[d1_databases]]
 binding = "DB"
 database_name = "app-db"
-database_id = "local"
+database_id = "57d4b6f0-03e4-4699-a0b5-5fea4b667d55"
 migrations_dir = "migrations"
 
 [[queues.producers]]

@@ -121,7 +121,61 @@ export const quizAttempt = sqliteTable("quiz_attempt", {
   answers: text("answers"), // JSON: { questionIndex, answer }[]
   score: integer("score"), // 0-100
   feedback: text("feedback"), // JSON: { questionIndex, correct, explanation }[]
+  failedAt: integer("failed_at", { mode: "timestamp" }), // set when score < 80, used for wait check
   error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export const learningLink = sqliteTable("learning_link", {
+  id: text("id").primaryKey(),
+  attemptId: text("attempt_id").notNull().references(() => quizAttempt.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  links: text("links"), // JSON: { questionIndex, topic, resources: [{title, url, description}][] }[]
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export const postDraft = sqliteTable("post_draft", {
+  id: text("id").primaryKey(),
+  attemptId: text("attempt_id").notNull().references(() => quizAttempt.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  status: text("status").notNull().default("pending"), // pending | done | error
+  blogTitle: text("blog_title"),
+  blogSlug: text("blog_slug"),
+  blogBody: text("blog_body"),
+  linkedinBody: text("linkedin_body"),
+  twitterBody: text("twitter_body"),
+  wasEdited: integer("was_edited", { mode: "boolean" }).notNull().default(false),
+  publishedAt: integer("published_at", { mode: "timestamp" }),
+  error: text("error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+});
+
+export const linkedinConnection = sqliteTable("linkedin_connection", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().unique().references(() => user.id, { onDelete: "cascade" }),
+  accessToken: text("access_token").notNull(),
+  linkedinUserId: text("linkedin_user_id").notNull(),
+  connectedAt: integer("connected_at", { mode: "timestamp" }).notNull(),
+});
+
+export const twitterConnection = sqliteTable("twitter_connection", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().unique().references(() => user.id, { onDelete: "cascade" }),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  twitterUserId: text("twitter_user_id").notNull(),
+  connectedAt: integer("connected_at", { mode: "timestamp" }).notNull(),
+});
+
+export const socialOauthState = sqliteTable("social_oauth_state", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  platform: text("platform").notNull(), // 'linkedin' | 'twitter'
+  codeVerifier: text("code_verifier"),
+  returnUrl: text("return_url"),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
